@@ -1,6 +1,10 @@
 # Code for Deblurring Neural Radiance Fields with Event-driven Bundle Adjustment (ACM MM 2024)
 This is an official PyTorch implementation of the EBAD-NeRF. Click [here](https://icvteam.github.io/EBAD-NeRF.html) to see the video and supplementary materials in our project website.
 
+## Method Overview
+
+![](./figure/figure.png)
+
 ## Code
 
 ### Synthetic Data

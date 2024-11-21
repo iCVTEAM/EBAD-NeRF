@@ -3,7 +3,13 @@ Implementation of Deblurring Neural Radiance Fields with Event-driven Bundle Adj
 
 ## Code
 
-The code will be released soon.
+### Synthetic Data
+
+The configs of the synthetic data are in the config_blender.txt file. Please download the synthetic data below and put it into the corresponding file (./data/blender_llff/). Then you can use the command below to train the model.
+
+```
+python train_blender.py --config config_blender.txt
+```
 
 ## Datasets
 

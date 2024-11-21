@@ -7,4 +7,16 @@ The code will be released soon.
 
 ## Datasets
 
-The datasets will be released soon.
+### Synthetic Data
+
+The synthetic data can be downloaded at [here](https://drive.google.com/drive/folders/112SGk_v-fxaUKz7w9dOqhXZRnkwTMkIt?usp=sharing). We use five Blender scenes from BAD-NeRF to construct this dataset. To increase the difficulty of the data, we add non-uniform camera shake. As shown in the folder, each scene folder contains five parts: 
+
+"images": images for training.
+
+"images_gt_blur": ground truth images of blur view for testing.
+
+"images_gt_novel": ground truth images of novel view for testing.
+
+"events.pt": the event data for training.
+
+"pose_bounds.npy": the initial poses for training.

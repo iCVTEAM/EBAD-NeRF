@@ -30,3 +30,24 @@ The synthetic data can be downloaded at [here](https://drive.google.com/drive/fo
 "events.pt": the event data for training.
 
 "pose_bounds.npy": the initial poses for training.
+
+
+
+## Citation
+
+If you find this useful, please consider citing our paper:
+
+```bibtex
+@inproceedings{qi2024deblurring,
+  title={Deblurring neural radiance fields with event-driven bundle adjustment},
+  author={Qi, Yunshan and Zhu, Lin and Zhao, Yifan and Bao, Nan and Li, Jia},
+  booktitle={Proceedings of the 32nd ACM International Conference on Multimedia},
+  pages={9262--9270},
+  year={2024}
+}
+```
+
+## Acknowledgment
+
+The overall framework and camera trajectory metrics computing are derived from [BAD-NeRF]([https://github.com/yenchenlin/nerf-pytorch/](https://github.com/WU-CVGL/BAD-NeRF)).  We appreciate the effort of the contributors to these repositories. Additionally the event loss is derived from our previous work [E<sup>2</sup>NeRF](https://github.com/iCVTEAM/E2NeRF).
+

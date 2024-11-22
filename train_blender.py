@@ -161,7 +161,7 @@ def train():
     print('TRAIN views are', i_train)
     print('TEST views are', i_test)
 
-    poses_num = images.shape[0]
+    poses_num = images.shape[0] * args.deblur_images
     images = images.view(images.shape[0], -1, 3)
 
     start = 0

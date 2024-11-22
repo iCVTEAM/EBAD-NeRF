@@ -7,9 +7,9 @@ model = event
 
 novel_view = True
 factor_pose_novel = 2.0
-N_novel_view = 20000
+N_novel_view = 10000
 
-N_rand = 1000
+N_rand = 5000
 deblur_images = 5
 
 N_samples = 64

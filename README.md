@@ -43,7 +43,7 @@ The real-world data can be downloaded at [here](https://drive.google.com/drive/f
 
 "pose_bounds.npy": the initial poses for training.
 
-Notice that for real-world data experiement in the paper, we select four images (No.[3, 10, 17, 24]) in the "images_gt_novel" folder for testing.
+Notice that we set b=6 for real-world data because the blur degree is larger than the synthetic data. Additionally, for real-world data experiement in the paper, we select four novel view images (No.[3, 10, 17, 24]) in the "images_gt_novel" folder for testing.
 
 
 

@@ -32,23 +32,23 @@ def train():
     print("-------------Loading Data-----------")
     K = None
     if args.dataset_type == 'llff':
-        images_colmap, poses_colmap, bds_start, render_poses = load_llff_data(args.datadir, pose_state=None,
+        images_colmap, poses_colmap, bds_start, _ = load_llff_data(args.datadir, pose_state=None,
                                                                       factor=args.factor, recenter=True,
                                                                       bd_factor=.75, spherify=args.spherify)
         hwf = poses_colmap[0, :3, -1]
 
-        # split train/val/test
-        i_test = torch.arange(0, images_colmap.shape[0], args.llffhold)
-        i_train = torch.Tensor([i for i in torch.arange(int(images_colmap.shape[0])) if (i not in i_test)]).long()
-
         # load initial poses and corresponding blurry images for training
-        images = images_colmap[i_train]
-        poses_start = poses_colmap[i_train]
+        images = images_colmap
+        poses_start = poses_colmap[0:16]
+
+        # load poses for rendering video
+        poses_novel = poses_colmap[16:]
+        render_poses = torch.tensor(pose_interpolation_llff(poses_novel.cpu().numpy(), 5))
 
         # load initial novel view poses and crresponding ground truth images for testing
         # We select 5 of the views for testing
-        poses_novel = poses_colmap[i_test]
-        imgs_gt_novel = load_imgs(os.path.join(args.datadir, 'images_gt_novel'))
+        poses_novel = poses_novel[[3, 10, 17, 24]]
+        imgs_gt_novel = load_imgs(os.path.join(args.datadir, 'images_gt_novel'))[[3, 10, 17, 24]]
 
         # initial the poses
         poses_start_se3 = SE3_to_se3_N(poses_start[:, :3, :4])
@@ -84,7 +84,7 @@ def train():
     use_event = args.use_event
     if use_event:
         # load event
-        event_maps = torch.load(os.path.join(args.datadir, "events.pt"))[i_train].to(device).float()
+        event_maps = torch.load(os.path.join(args.datadir, "events.pt")).to(device).float()
         # rgb2grey
         rgb2grey = torch.tensor([1/3, 1/3, 1/3]).to(device)
         print("Load Event Data", event_maps.shape)
@@ -158,8 +158,6 @@ def train():
     print("------------Start Training----------")
     N_iters = args.N_iters + 1
     writer = SummaryWriter(os.path.join(basedir, expname, 'logs'))
-    print('TRAIN views are', i_train)
-    print('TEST views are', i_test)
 
     poses_num = images.shape[0] * args.deblur_images
     images = images.view(images.shape[0], -1, 3)
@@ -193,7 +191,7 @@ def train():
         event_loss = []
         for j in range(shape0):
             event_data = event_maps[img_idx[j], :, ray_idx]
-            event_loss.append(event_loss_call_linlog(ret_rgb_map[j], event_data, rgb2grey, args.bin_num) * 0.005)
+            event_loss.append(event_loss_call_log(ret_rgb_map[j], event_data, rgb2grey, args.bin_num) * 0.005)
             for k in range(args.deblur_images):
                 ret_rgb_blur.append(ret_rgb_map[j][k])
         ret_rgb_blur = torch.stack(ret_rgb_blur).view(shape0, args.deblur_images, interval, 3)
@@ -265,9 +263,9 @@ def train():
             # Turn on testing mode
             with torch.no_grad():
                 if args.deblur_images % 2 == 0:
-                    i_render = torch.arange(i_train.shape[0]) * (args.deblur_images + 1) + args.deblur_images // 2
+                    i_render = torch.arange(images.shape[0]) * (args.deblur_images + 1) + args.deblur_images // 2
                 else:
-                    i_render = torch.arange(i_train.shape[0]) * args.deblur_images + args.deblur_images // 2
+                    i_render = torch.arange(images.shape[0]) * args.deblur_images + args.deblur_images // 2
                 imgs_render = render_image_test(i, graph, all_poses[i_render], H, W, K, args)
 
         if i % args.i_video == 0 and i > 0:
@@ -281,8 +279,6 @@ def train():
 
         if i % args.i_novel_view == 0 and i > 0:
             # Turn on novel view testing mode
-            i_ = torch.arange(0, images.shape[0], args.llffhold-1)
-            poses_test_se3_ = graph.se3.weight[i_,:6]
             model_test = novel_view_test.Model(poses_novel_se3, graph)
             graph_test = model_test.build_network(args)
             optimizer_test = model_test.setup_optimizer(args)
@@ -308,14 +304,6 @@ def train():
                         param_group['lr'] = new_lrate_novel * args.factor_pose_novel
             with torch.no_grad():
                 imgs_render_novel = render_image_test(i, graph, poses_sharp, H, W, K, args, novel_view=True)
-
-        if i % args.N_iters == 0 and i > 0:
-            # Turn on testing mode
-            with torch.no_grad():
-                path_pose = os.path.join(basedir, expname)
-                i_render_pose = torch.arange(i_train.shape[0]) * args.deblur_images + args.deblur_images // 2
-                render_poses_final = all_poses[i_render_pose]
-                save_render_pose(render_poses_final, path_pose)
 
         global_step += 1
 

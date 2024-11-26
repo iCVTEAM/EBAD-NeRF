@@ -15,6 +15,14 @@ The configs of the synthetic data are in the config_blender.txt file. Please dow
 python train_blender.py --config config_blender.txt
 ```
 
+### Real-World Data
+
+The configs of the real-world data are in the config_davis.txt file. Please download the real-world data below and put it into the corresponding file (./data/davis_llff/). Then you can use the command below to train the model.
+
+```
+python train_davis.py --config config_davis.txt
+```
+
 ## Datasets
 
 ### Synthetic Data

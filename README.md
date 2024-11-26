@@ -5,6 +5,10 @@ This is an official PyTorch implementation of the EBAD-NeRF. Click [here](https:
 
 ![](./figure/figure.png)
 
+## Installation
+The code is based on the offical Pytorch implementation of the BAD-NeRF and use the same environment.
+Please refer to its github [website](https://github.com/WU-CVGL/BAD-NeRF) for the environment installation.
+
 ## Code
 
 ### Synthetic Data
@@ -71,5 +75,5 @@ If you find this useful, please consider citing our paper:
 
 ## Acknowledgment
 
-The overall framework and camera trajectory metrics computing are derived from [BAD-NeRF]([https://github.com/yenchenlin/nerf-pytorch/](https://github.com/WU-CVGL/BAD-NeRF)).  We appreciate the effort of the contributors to these repositories. Additionally the event loss is derived from our previous work [E<sup>2</sup>NeRF](https://github.com/iCVTEAM/E2NeRF).
+The overall framework and camera trajectory metrics computing are derived from [BAD-NeRF](https://github.com/WU-CVGL/BAD-NeRF).  We appreciate the effort of the contributors to these repositories. Additionally the event loss is derived from our previous work [E<sup>2</sup>NeRF](https://github.com/iCVTEAM/E2NeRF).
 

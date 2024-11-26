@@ -31,6 +31,20 @@ The synthetic data can be downloaded at [here](https://drive.google.com/drive/fo
 
 "pose_bounds.npy": the initial poses for training.
 
+### Real-World Data
+
+The real-world data can be downloaded at [here](https://drive.google.com/drive/folders/1BNxZtD5PcZBEzKu7i08FFLzJFDCEodY9?usp=drive_link). We use Davis 346 event camera to capture the real-world data. The data consist of two scenes as shown in the folder. Each folder contains four parts:
+
+"images": images for training.
+
+"images_gt_novel": ground truth images of novel view for testing.
+
+"events.pt": the event data for training.
+
+"pose_bounds.npy": the initial poses for training.
+
+Notice that for real-world data experiement in the paper, we select four images (No.[3, 10, 17, 24]) in the "images_gt_novel" folder for testing.
+
 
 
 ## Citation

@@ -1,6 +1,6 @@
 expname = classroom
 basedir = ./logs_davis
-datadir = ./data/davis/classroom
+datadir = ./data/davis_llff/classroom
 dataset_type = llff
 
 model = event
